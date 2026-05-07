@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wat eten we vandaag? - Pizza Editie</title>
+    <style>
+        /* Importeer een stevig, retro lettertype */
+        @import url('https://fonts.googleapis.com/css2?family=Crete+Round&display=swap');
+
+        body {
+            font-family: 'Crete Round', serif;
+            background-color: #e0d6c5; /* Kleur van een tafelblad */
+            background-image: repeating-linear-gradient(45deg, #d4473d 25%, transparent 25%, transparent 75%, #d4473d 75%, #d4473d), 
+                              repeating-linear-gradient(45deg, #d4473d 25%, #e0d6c5 25%, #e0d6c5 75%, #d4473d 75%, #d4473d);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px; /* Rood-wit geruit tafelkleed effect */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        #main-container {
+            background: #fdfaf5; /* Kleur van wit karton */
+            padding: 40px;
+            border-radius: 5px;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.1);
+            width: 450px;
+            text-align: center;
+            border: 8px double #d4473d; /* Dubbele rode rand zoals op de doos */
+            position: relative;
+        }
+
+        /* Versiering: Italiaanse strepen */
+        .italy-border {
+            height: 10px;
+            width: 100%;
+            background: linear-gradient(to right, #008c45 33%, #f4f9ff 33%, #f4f9ff 66%, #cd212a 66%);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        h1 { 
+            color: #cd212a; 
+            font-size: 32px; 
+            text-transform: uppercase;
+            margin: 20px 0;
+            border-bottom: 2px dashed #008c45;
+            padding-bottom: 10px;
+        }
+
+        .recept-box {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: transparent;
+            border: 2px solid #008c45;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .recept-box::before {
+            content: "★ SPECIALITÀ ★";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fdfaf5;
+            padding: 0 10px;
+            color: #008c45;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .titel { 
+            font-weight: bold; 
+            font-size: 26px; 
+            color: #cd212a; 
+            display: block; 
+            margin-bottom: 10px;
+        }
+
+        .inhoud { 
+            font-size: 18px; 
+            line-height: 1.4; 
+            color: #333; 
+            font-style: italic;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn-genereer {
+            background-color: #008c45; /* Italiaans groen */
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.2s;
+        }
+        
+        .btn-genereer:hover {
+            background-color: #005e2e;
+        }
+        
+        .btn-sluit {
+            background-color: transparent;
+            color: #cd212a;
+            border: 1px solid #cd212a;
+            padding: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .copyright {
+            margin-top: 25px;
+            color: #333;
+            font-size: 14px;
+            font-weight: bold;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+
+        .pizza-icon {
+            font-size: 50px;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="main-container">
+    <div class="italy-border"></div>
+    <div class="pizza-icon">🍕</div>
+    <h1>Wat eten we vandaag?</h1>
+    
+    <div class="recept-box">
+        <span id="recept-titel" class="titel">Laden...</span>
+        <div id="recept-inhoud" class="inhoud"></div>
+    </div>
+
+    <div class="button-group">
+        <button class="btn-genereer" onclick="kiesWillekeurigRecept()">Volgende Bestelling</button>
+        <button class="btn-sluit" onclick="sluitPagina()">Sluit doos</button>
+    </div>
+
+    <div class="copyright">
+        &copy; 2026 Peter - Buon Appetito!
+    </div>
+</div>
+
+<script>
+    const opties = [
+        { titel: "McDonald's", inhoud: "Geen pizza vandaag? Dan maar naar de Mac!" },
+        { titel: "AVG: Spinazie", inhoud: "Gekookte aardappelen met spinazie en een gebakken hamburger." },
+        { titel: "Patat", inhoud: "Lekker patat bakken met een snack naar keuze (frikandel of kroket)." },
+        { titel: "Shoarma", inhoud: "Pita broodjes met shoarmavlees, ijsbergsla en knoflooksaus." },
+        { titel: "Tosti's", inhoud: "Grote tosti's met ham en kaas." },
+        { titel: "Pannenkoeken", inhoud: "Zelfgebakken pannenkoeken met stroop, suiker of spek." },
+        { titel: "Poffertjes", inhoud: "Een flinke portie poffertjes met boter en poedersuiker." },
+        { titel: "Soep met Broodjes", inhoud: "Een pan soep met afgebakken broodjes met ham of kaas." },
+        { titel: "AVG: Bloemkool", inhoud: "Gekookte aardappels, bloemkool met een papje en een kipschnitzel." },
+        { titel: "Bami Speciaal", inhoud: "Bami met ham, ei en gebakken spekjes." },
+        { titel: "Stamppot Boerenkool", inhoud: "Boerenkool met jus en een rookworst." },
+        { titel: "Spaghetti Bolognese", inhoud: "Spaghetti met tomatensaus, gehakt en geraspte kaas." },
+        { titel: "AVG: Sperziebonen", inhoud: "Gekookte aardappels, sperziebonen en een varkensschnitzel." },
+        { titel: "Nasi Goreng", inhoud: "Nasi met stukjes kip, roerei en satésaus." },
+        { titel: "Macaroni", inhoud: "Macaroni met blokjes ham en veel kaas." },
+        { titel: "Andijviestamppot", inhoud: "Stamppot rauwe andijvie met uitgebakken spekjes en een gehaktbal." },
+        { titel: "Uit eten: Stip Rian", inhoud: "Vandaag gaan we lekker eten bij Stip Rian!" },
+        { titel: "Wokken", inhoud: "Vandaag gaan we gezellig naar de Wok!" }
+    ];
+
+    function kiesWillekeurigRecept() {
+        let nieuweIndex;
+        do {
+            nieuweIndex = Math.floor(Math.random() * opties.length);
+        } while (window.laatsteIndex === nieuweIndex);
+        
+        window.laatsteIndex = nieuweIndex;
+        const keuze = opties[nieuweIndex];
+        
+        document.getElementById('recept-titel').innerText = keuze.titel;
+        document.getElementById('recept-inhoud').innerText = keuze.inhoud;
+    }
+
+    function sluitPagina() {
+        window.close();
+        document.body.innerHTML = "";
+        document.body.style.background = "#333";
+    }
+
+    window.onload = kiesWillekeurigRecept;
+</script>
+
+</body>
+</html>
